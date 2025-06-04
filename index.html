@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <title>Login via C und WebAssembly</title>
+    <style>
+        #geheimbereich {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login Test</h1>
+    <label>Benutzername: <input id="user" type="text" /></label><br />
+    <label>Passwort: <input id="pass" type="password" /></label><br />
+    <button id="loginBtn">Login</button>
+
+    <p id="result"></p>
+
+    <!-- Geheimer Bereich: Bild + optionaler Link -->
+    <div id="geheimbereich">
+        <h2>Geheimer Bereich: 29.05.–01.06.2025</h2>
+        <img id="geheimbild" src="29.05.-01.06.2025/1.jpg" alt="Geheimes Bild" width="300" />
+        <p><a href="29.05.-01.06.2025/" target="_blank">Ordner anzeigen</a></p>
+    </div>
+
+    <script src="source.js"></script>
+    <script>
+        Module.onRuntimeInitialized = () => {
+            const check_login = Module.cwrap('check_login', 'number', ['string', 'string']);
+
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                const user = document.getElementById('user').value;
+                const pass = document.getElementById('pass').value;
+
+                const success = check_login(user, pass);
+
+                document.getElementById('result').textContent = success
+                    ? "Login erfolgreich!"
+                    : "Login fehlgeschlagen.";
+
+                document.getElementById('geheimbereich').style.display = success ? "block" : "none";
+            });
+        };
+    </script>
+</body>
+</html>
+
+
+
+
